@@ -39,7 +39,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
 
   return (
     <footer className="mt-24 border-t border-glass-border">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="container-site flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-mono text-sm text-muted">{t.rights(year, settings?.nombre ?? publicContent.brand)}</p>
         {links.length > 0 && (
           <nav aria-label={t.label}>

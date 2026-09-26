@@ -30,10 +30,11 @@ export async function generateMetadata({ params }: PageProps<"/proyectos/[slug]"
   return { title: project.titulo, description: project.resumen };
 }
 
-function CaseSection({ title, children }: { title: string; children: ReactNode }) {
+/** Sección del caso de estudio; `wide` usa todo el ancho (galería), el resto la columna de lectura. */
+function CaseSection({ title, wide = false, children }: { title: string; wide?: boolean; children: ReactNode }) {
   return (
     <Reveal>
-      <section className="flex flex-col gap-4">
+      <section className={`flex flex-col gap-4 ${wide ? "" : "max-w-3xl"}`}>
         <Heading level={2} size={3}>
           {title}
         </Heading>
@@ -55,22 +56,24 @@ export default async function ProjectPage({ params }: PageProps<"/proyectos/[slu
   const hasLinks = Boolean(project.demo_url || project.repo_url);
 
   return (
-    <article className="mx-auto flex max-w-3xl flex-col gap-14 pt-10 sm:pt-16">
+    <article className="flex flex-col gap-14 pt-10 sm:pt-16">
       <header className="flex flex-col gap-6">
-        <Link href="/proyectos" className="inline-flex items-center gap-1.5 self-start rounded text-sm text-muted hover:text-fg">
-          <ArrowLeft aria-hidden="true" className="size-4" />
-          {t.back}
-        </Link>
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge>{publicContent.categorias[project.categoria]}</Badge>
-          {project.cliente && (
-            <span className="text-sm text-muted">
-              {t.client}: <span className="text-fg">{project.cliente}</span>
-            </span>
-          )}
+        <div className="flex max-w-3xl flex-col gap-6">
+          <Link href="/proyectos" className="inline-flex items-center gap-1.5 self-start rounded text-sm text-muted hover:text-fg">
+            <ArrowLeft aria-hidden="true" className="size-4" />
+            {t.back}
+          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge>{publicContent.categorias[project.categoria]}</Badge>
+            {project.cliente && (
+              <span className="text-sm text-muted">
+                {t.client}: <span className="text-fg">{project.cliente}</span>
+              </span>
+            )}
+          </div>
+          <Heading level={1}>{project.titulo}</Heading>
+          <p className="text-xl leading-relaxed text-muted">{project.resumen}</p>
         </div>
-        <Heading level={1}>{project.titulo}</Heading>
-        <p className="text-xl leading-relaxed text-muted">{project.resumen}</p>
         {project.portada_path && (
           <div className="glass-flat relative aspect-[1200/630] overflow-hidden rounded-2xl">
             <Image
@@ -78,7 +81,7 @@ export default async function ProjectPage({ params }: PageProps<"/proyectos/[slu
               alt={t.coverAlt(project.titulo)}
               fill
               priority
-              sizes="(min-width: 768px) 768px, 100vw"
+              sizes="(min-width: 1200px) 1152px, 100vw"
               className="object-cover"
             />
           </div>
@@ -135,7 +138,7 @@ export default async function ProjectPage({ params }: PageProps<"/proyectos/[slu
         </CaseSection>
       )}
       {project.galeria_paths.length > 0 && (
-        <CaseSection title={t.sections.gallery}>
+        <CaseSection title={t.sections.gallery} wide>
           <ProjectGallery paths={project.galeria_paths} title={project.titulo} />
         </CaseSection>
       )}

@@ -6,16 +6,17 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { publicContent } from "@/content/es/public";
 import { cn } from "@/lib/cn";
+import { DockNav } from "./DockNav";
+import { useHideOnScroll } from "./useHideOnScroll";
 
 const t = publicContent.nav;
-
-function isActive(pathname: string, href: string): boolean {
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const hidden = useHideOnScroll();
+
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   useEffect(() => {
     if (!open) return;
@@ -26,14 +27,17 @@ export function SiteHeader() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
-  const linkClass = (href: string) =>
-    cn(
-      "rounded-full px-4 py-2 text-sm transition-colors",
-      isActive(pathname, href) ? "bg-accent/10 text-accent" : "text-muted hover:text-fg",
-    );
+  // Con el menú móvil abierto, el header no se oculta.
+  const isHidden = hidden && !open;
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 pt-3">
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-40 pt-3 transition-transform duration-300 ease-out",
+        // Oculto al bajar; si se llega con el teclado (Tab), vuelve a mostrarse.
+        isHidden && "-translate-y-[calc(100%+1rem)] has-[:focus-visible]:translate-y-0",
+      )}
+    >
       <div className="container-site">
         {/* Fondo más opaco que el vidrio base: el header pasa sobre texto grande al hacer scroll. */}
         <div
@@ -42,26 +46,14 @@ export function SiteHeader() {
             open ? "[--glass-bg:rgb(10_13_20/0.94)]" : "[--glass-bg:rgb(7_9_15/0.72)]",
           )}
         >
-          <div className="flex h-14 items-center justify-between gap-4 pr-2 pl-5">
+          <div className="flex h-16 items-center justify-between gap-4 pr-2 pl-5 md:pr-2.5">
             <Link href="/" onClick={() => setOpen(false)} className="font-display text-lg font-semibold tracking-wide">
               {publicContent.brand}
               <span className="text-accent">_</span>
             </Link>
 
             <nav aria-label={t.label} className="hidden md:block">
-              <ul className="flex items-center gap-1">
-                {t.items.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className={linkClass(item.href)}
-                      aria-current={isActive(pathname, item.href) ? "page" : undefined}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <DockNav items={t.items} isActive={isActive} />
             </nav>
 
             <button
@@ -87,8 +79,11 @@ export function SiteHeader() {
                   <Link
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    className={cn(linkClass(item.href), "block py-3 text-base")}
-                    aria-current={isActive(pathname, item.href) ? "page" : undefined}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    className={cn(
+                      "block rounded-full px-4 py-3 text-base transition-colors",
+                      isActive(item.href) ? "bg-accent/10 text-accent" : "text-muted hover:text-fg",
+                    )}
                   >
                     {item.label}
                   </Link>

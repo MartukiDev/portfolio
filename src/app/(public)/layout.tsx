@@ -16,7 +16,7 @@ export default async function PublicLayout({ children }: LayoutProps<"/">) {
         {publicContent.skipToContent}
       </a>
       <SiteHeader />
-      <main id="contenido" className="container-site flex-1 pt-20">
+      <main id="contenido" className="container-site flex-1 pt-(--header-offset)">
         <MotionProvider>{children}</MotionProvider>
       </main>
       <SiteFooter settings={settings} />

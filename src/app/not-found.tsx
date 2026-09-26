@@ -12,7 +12,7 @@ export default function NotFound() {
   return (
     <>
       <SiteHeader />
-      <main id="contenido" className="container-site flex flex-1 items-center pt-24 pb-16">
+      <main id="contenido" className="container-site flex flex-1 items-center pt-[calc(var(--header-offset)+1rem)] pb-16">
         <div className="w-full">
           <NotFoundTerminal />
         </div>

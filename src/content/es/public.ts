@@ -7,10 +7,10 @@ export const publicContent = {
     open: "Abrir menú",
     close: "Cerrar menú",
     items: [
-      { href: "/proyectos", label: "Proyectos" },
-      { href: "/servicios", label: "Servicios" },
-      { href: "/cv", label: "CV" },
-      { href: "/contacto", label: "Contacto" },
+      { href: "/proyectos", label: "Proyectos", icon: "projects" },
+      { href: "/servicios", label: "Servicios", icon: "services" },
+      { href: "/cv", label: "CV", icon: "cv" },
+      { href: "/contacto", label: "Contacto", icon: "contact" },
     ],
   },
 

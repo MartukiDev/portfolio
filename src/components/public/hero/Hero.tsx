@@ -26,7 +26,7 @@ export function Hero({ settings }: { settings: SiteSettings }) {
   // Centrado en el área bajo el header, con una leve elevación óptica (5svh):
   // el aire sobre y bajo la terminal queda casi igual.
   return (
-    <section aria-labelledby="hero-title" className="flex min-h-[calc(100svh-5rem)] items-center pb-[5svh]">
+    <section aria-labelledby="hero-title" className="flex min-h-[calc(100svh-var(--header-offset))] items-center pb-[5svh]">
       <div className="w-full">
         {/* Texto real para lectores de pantalla y buscadores; la terminal es decorativa. */}
         <h1 id="hero-title" className="sr-only">

@@ -296,3 +296,38 @@
     outline-offset: 2px;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Hero de terminal                                                    */
+/* ------------------------------------------------------------------ */
+
+/*
+ * Primera visita de la sesión: el servidor renderiza el estado final, pero
+ * las partes animadas quedan ocultas (ocupando su espacio) hasta que la
+ * animación toma el control. Con data-hero-played se ve el final directo.
+ */
+html:not([data-hero-played]) [data-hero-state="idle"] [data-hero-part] {
+  visibility: hidden;
+}
+
+/* Cursor de ancho cero: no desplaza el texto ni crea puntos de corte de línea. */
+.hero-caret {
+  position: relative;
+}
+.hero-caret::after {
+  content: "";
+  position: absolute;
+  left: 0.08em;
+  top: 0.1em;
+  width: 0.55em;
+  height: 1em;
+  background-color: var(--accent);
+}
+.hero-caret--blink::after {
+  animation: caret-blink 1.06s steps(1) infinite;
+}
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}

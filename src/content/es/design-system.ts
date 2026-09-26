@@ -56,7 +56,7 @@ export const designSystem = {
       "Título de sección con etiqueta pequeña en mayúsculas y bajada en texto secundario.",
     body: "Geist Sans para cuerpo e interfaz. Texto de párrafo con interlineado cómodo para lectura larga en casos de estudio y en la bio.",
     muted: "Texto secundario en text-muted para descripciones y metadatos.",
-    mono: "martin@upla:~$ whoami",
+    mono: "martojs@m2air:~$ whoami",
     stack: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
     labels: {
       h1: "h1 · Oswald 600",

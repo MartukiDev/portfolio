@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Oswald } from "next/font/google";
 import { Background } from "@/components/ui/Background";
 import { site } from "@/content/es/site";
+import { heroInitScript } from "@/lib/hero";
 import "./globals.css";
 
 const oswald = Oswald({
@@ -30,10 +31,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    // suppressHydrationWarning: el script de <head> agrega data-hero-played antes de hidratar.
     <html
       lang={site.lang}
+      suppressHydrationWarning
       className={`${oswald.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        {/* Antes del primer pintado: decide si el hero se muestra directo en su estado final. */}
+        <script dangerouslySetInnerHTML={{ __html: heroInitScript }} />
+        <noscript>
+          <style>{"[data-hero-part]{visibility:visible!important;opacity:1!important}"}</style>
+        </noscript>
+      </head>
       <body className="relative flex min-h-full flex-col">
         <Background />
         {children}

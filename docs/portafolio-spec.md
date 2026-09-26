@@ -293,11 +293,11 @@ Contraste mínimo AA en todo texto sobre vidrio.
 ### Hero: nombre escribiéndose en terminal
 La portada abre con una ventana de terminal de vidrio (barra con tres puntos y título `martodev@portafolio: ~`). Secuencia:
 
-1. Aparece el prompt `martin@upla:~$` y se escribe `whoami`.
+1. Aparece el prompt `martojs@m2air:~$` y se escribe `whoami`.
 2. Salida: el nombre (desde `site_settings.nombre`) escribiéndose carácter a carácter en tamaño grande, en mono.
 3. Debajo aparece la tagline (desde `site_settings.tagline`).
 4. Entran con fade los badges de disponibilidad y los dos CTA.
-5. Queda el cursor parpadeando al final.
+5. Queda una línea final con el prompt `martojs@m2air:~$` y el cursor parpadeando.
 
 Reglas:
 - **Se ejecuta una sola vez por sesión** (`sessionStorage`). Si ya se vio, o si hay `prefers-reduced-motion`, se muestra directamente el estado final.

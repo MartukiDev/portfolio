@@ -7,26 +7,17 @@ import { publicContent } from "@/content/es/public";
 import { cn } from "@/lib/cn";
 
 type NavItem = (typeof publicContent.nav.items)[number];
-type Tone = NavItem["icon"];
 
-const icons: Record<Tone, LucideIcon> = {
+const icons: Record<NavItem["icon"], LucideIcon> = {
   projects: FolderKanban,
   services: BriefcaseBusiness,
   cv: FileText,
   contact: Mail,
 };
 
-/** Cada "app" con su color de la paleta. El texto va en fg sobre fondo oscuro teñido (AA). */
-const tones: Record<Tone, string> = {
-  projects: "border-accent/35 from-accent/30 to-accent/[0.06] [--dock-icon:var(--accent)]",
-  services: "border-accent-2/35 from-accent-2/30 to-accent-2/[0.06] [--dock-icon:var(--accent-2)]",
-  cv: "border-success/35 from-success/25 to-success/[0.05] [--dock-icon:var(--success)]",
-  contact: "border-accent/30 from-accent/25 via-accent-2/15 to-accent-2/[0.06] [--dock-icon:var(--accent)]",
-};
-
 // Ampliación tipo Dock: curva gaussiana según la distancia del cursor al centro de cada ícono.
-const MAX_BOOST = 0.42; // escala máxima = 1.42
-const SIGMA = 58; // px: qué tan lejos llega la influencia a los vecinos
+const MAX_BOOST = 0.62; // escala máxima = 1.62
+const SIGMA = 60; // px: qué tan lejos llega la influencia a los vecinos
 const EASE = 0.22; // suavizado por frame (spring simple)
 
 type DockNavProps = {
@@ -137,18 +128,16 @@ export function DockNav({ items, isActive }: DockNavProps) {
               }}
               href={item.href}
               aria-current={active ? "page" : undefined}
-              className={cn(
-                "relative z-10 flex h-12 w-[4.75rem] origin-top flex-col items-center justify-center gap-1 rounded-[0.9rem] border bg-gradient-to-b shadow-[inset_0_1px_0_0_rgb(255_255_255/0.18),0_8px_20px_-8px_rgb(0_0_0/0.6)] will-change-transform",
-                tones[item.icon],
-              )}
+              // Todas las "apps" con el mismo tono grafito; el acento solo marca la página actual.
+              className="relative z-10 flex h-12 w-[4.75rem] origin-top flex-col items-center justify-center gap-1 rounded-[0.9rem] border border-white/12 bg-gradient-to-b from-white/[0.10] to-white/[0.03] shadow-[inset_0_1px_0_0_rgb(255_255_255/0.14),0_8px_20px_-8px_rgb(0_0_0/0.6)] transition-colors will-change-transform hover:border-white/20"
             >
-              <Icon aria-hidden="true" className="size-[1.1rem] text-(--dock-icon)" />
+              <Icon aria-hidden="true" className={cn("size-[1.1rem]", active ? "text-accent" : "text-fg/80")} />
               <span className="text-[0.6875rem] leading-none font-medium text-fg">{item.label}</span>
+              {/* Punto de "app abierta": dentro del link para moverse con la ampliación. */}
+              {active && (
+                <span aria-hidden="true" className="absolute -bottom-[0.45rem] left-1/2 size-1 -translate-x-1/2 rounded-full bg-fg/80" />
+              )}
             </Link>
-            {/* Punto de "app abierta" bajo la página actual. */}
-            {active && (
-              <span aria-hidden="true" className="absolute -bottom-[0.4rem] left-1/2 size-1 -translate-x-1/2 rounded-full bg-fg/80" />
-            )}
           </li>
         );
       })}

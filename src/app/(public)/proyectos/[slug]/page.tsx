@@ -148,7 +148,7 @@ export default async function ProjectPage({ params }: PageProps<"/proyectos/[slu
           <Heading level={2} size={4}>
             {t.cta.title}
           </Heading>
-          <Button href="/contacto">{t.cta.action}</Button>
+          <Button href="/contacto?tipo=freelance">{t.cta.action}</Button>
         </GlassPanel>
       </Reveal>
     </article>

@@ -86,7 +86,11 @@ export default async function CvPage() {
                 </div>
               )}
             </div>
-            <Button href="/contacto" variant="secondary" className="self-start">
+            <Button
+              href={settings.disponible_practica ? "/contacto?tipo=practica" : "/contacto?tipo=freelance"}
+              variant="secondary"
+              className="self-start"
+            >
               {t.availability.contact}
             </Button>
           </GlassPanel>

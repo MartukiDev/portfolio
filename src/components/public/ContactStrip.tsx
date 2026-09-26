@@ -16,7 +16,7 @@ export function ContactStrip({ settings }: { settings: SiteSettings }) {
       <GlassPanel as="section" aria-labelledby="contact-strip-title" className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <SectionTitle eyebrow={t.eyebrow} title={<span id="contact-strip-title">{t.title}</span>} description={t.description} />
         <div className="flex flex-col gap-3 sm:flex-row md:flex-col lg:flex-row">
-          <Button href="/contacto" size="lg">
+          <Button href="/contacto?tipo=freelance" size="lg">
             {t.cta}
           </Button>
           {settings.whatsapp && (

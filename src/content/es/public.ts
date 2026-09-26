@@ -18,7 +18,7 @@ export const publicContent = {
     windowTitle: "martojs@portafolio: ~",
     prompt: "martojs@m2air:~$",
     command: "whoami",
-    ctaPrimary: { href: "/contacto", label: "Trabajemos juntos" },
+    ctaPrimary: { href: "/contacto?tipo=freelance", label: "Trabajemos juntos" },
     ctaSecondary: { href: "/cv", label: "Ver CV" },
     badges: {
       freelance: "Disponible para freelance",

@@ -20,3 +20,10 @@ export function createPublicClient(tags: readonly CacheTag[]) {
     },
   });
 }
+
+/** Cliente anónimo sin caché para escrituras públicas (p. ej. el formulario de contacto). */
+export function createAnonWriteClient() {
+  return createSupabaseClient<Database>(supabaseUrl, supabasePublishableKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+}

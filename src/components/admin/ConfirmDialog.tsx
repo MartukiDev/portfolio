@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { adminForms } from "@/content/es/admin-forms";
+import { Modal } from "./Modal";
 
 type ConfirmDialogProps = {
   title: string;
@@ -13,7 +14,6 @@ type ConfirmDialogProps = {
   onConfirm: () => Promise<void>;
 };
 
-/** Confirmación con <dialog> nativo (foco atrapado, Esc cierra). */
 export function ConfirmDialog({
   title,
   body,
@@ -21,20 +21,10 @@ export function ConfirmDialog({
   trigger,
   onConfirm,
 }: ConfirmDialogProps) {
-  const ref = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const titleId = useId();
   const bodyId = useId();
-
-  useEffect(() => {
-    const dialog = ref.current;
-    if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
-  }, [open]);
-
-  const close = () => setOpen(false);
 
   const confirm = async () => {
     setPending(true);
@@ -42,21 +32,14 @@ export function ConfirmDialog({
       await onConfirm();
     } finally {
       setPending(false);
-      close();
+      setOpen(false);
     }
   };
 
   return (
     <>
       {trigger(() => setOpen(true))}
-      <dialog
-        ref={ref}
-        aria-labelledby={titleId}
-        aria-describedby={bodyId}
-        onCancel={(event) => pending && event.preventDefault()}
-        onClose={() => setOpen(false)}
-        className="m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl border border-glass-border bg-surface p-6 text-fg shadow-glass backdrop:bg-bg/75"
-      >
+      <Modal open={open} onClose={() => setOpen(false)} labelledBy={titleId} describedBy={bodyId} locked={pending}>
         <h2 id={titleId} className="heading-4">
           {title}
         </h2>
@@ -64,18 +47,14 @@ export function ConfirmDialog({
           {body}
         </p>
         <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button variant="ghost" onClick={close} disabled={pending} autoFocus>
+          <Button variant="ghost" onClick={() => setOpen(false)} disabled={pending} autoFocus>
             {adminForms.cancel}
           </Button>
-          <Button
-            onClick={confirm}
-            disabled={pending}
-            className="bg-red-400 text-bg hover:bg-red-300"
-          >
+          <Button onClick={confirm} disabled={pending} className="bg-red-400 text-bg hover:bg-red-300">
             {pending ? adminForms.confirm.deleting : confirmLabel}
           </Button>
         </div>
-      </dialog>
+      </Modal>
     </>
   );
 }

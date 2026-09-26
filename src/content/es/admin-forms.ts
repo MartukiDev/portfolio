@@ -23,6 +23,7 @@ export const adminForms = {
     galleryMax: "Máximo 20 imágenes en la galería.",
     invalidPath: "Ruta de imagen inválida.",
     invalidDoc: "El contenido del editor no es válido.",
+    endBeforeStart: "La fecha de fin no puede ser anterior a la de inicio.",
   },
 
   upload: {

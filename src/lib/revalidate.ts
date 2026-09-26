@@ -6,12 +6,25 @@ export function revalidateSettings(): void {
   revalidatePath("/", "layout");
 }
 
-/** Rutas públicas donde aparece un proyecto (incluye el slug anterior si cambió). */
-export function revalidateProjects(...slugs: Array<string | null | undefined>): void {
+/** Rutas públicas donde aparecen proyectos: portada, listado, todos los casos de estudio y sitemap. */
+export function revalidateProjects(): void {
   revalidatePath("/");
-  revalidatePath("/proyectos");
+  revalidatePath("/proyectos", "layout");
   revalidatePath("/sitemap.xml");
-  for (const slug of new Set(slugs)) {
-    if (slug) revalidatePath(`/proyectos/${slug}`);
-  }
+}
+
+export function revalidateServices(): void {
+  revalidatePath("/");
+  revalidatePath("/servicios");
+}
+
+/** Los testimonios aparecen en la portada y pueden mostrarse en su caso de estudio. */
+export function revalidateTestimonials(): void {
+  revalidatePath("/");
+  revalidatePath("/proyectos", "layout");
+}
+
+/** Trayectoria y habilidades viven en /cv. */
+export function revalidateCv(): void {
+  revalidatePath("/cv");
 }

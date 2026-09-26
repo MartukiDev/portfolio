@@ -1,8 +1,7 @@
 "use server";
 
-import { z } from "zod";
-import { adminForms } from "@/content/es/admin-forms";
 import { adminProjects } from "@/content/es/admin-projects";
+import { adminForms } from "@/content/es/admin-forms";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import { revalidateProjects } from "@/lib/revalidate";
 import { MEDIA_BUCKET, projectFolder } from "@/lib/storage";
@@ -11,11 +10,11 @@ import {
   projectSchema,
   type ProjectField,
 } from "@/lib/validations/project";
+import { deleteById, idSchema, invalid, notFound, setPublishedFlag, unexpected } from "./helpers";
 import { moveItem, nextOrder, type MoveDirection } from "./reorder";
 import type { ActionResult, FormState } from "./result";
 
 const t = adminProjects.toasts;
-const idSchema = z.uuid();
 
 export type SaveProjectResult = ActionResult<ProjectField> & { created?: boolean };
 
@@ -26,21 +25,15 @@ export async function saveProject(
   const { supabase } = await requireAdmin();
 
   const parsed = projectSchema.safeParse(projectFormData(formData));
-  if (!parsed.success) {
-    return {
-      ok: false,
-      error: adminForms.genericError,
-      fieldErrors: z.flattenError(parsed.error).fieldErrors,
-    };
-  }
+  if (!parsed.success) return invalid<ProjectField>(parsed.error);
   const input = parsed.data;
 
   const { data: existing, error: readError } = await supabase
     .from("projects")
-    .select("slug, portada_path, galeria_paths")
+    .select("portada_path, galeria_paths")
     .eq("id", input.id)
     .maybeSingle();
-  if (readError) return { ok: false, error: adminForms.unexpectedError };
+  if (readError) return unexpected;
 
   const { error } = existing
     ? await supabase.from("projects").update(input).eq("id", input.id)
@@ -56,7 +49,7 @@ export async function saveProject(
         fieldErrors: { slug: [adminForms.validation.slugTaken] },
       };
     }
-    return { ok: false, error: adminForms.unexpectedError };
+    return unexpected;
   }
 
   // Imágenes que dejaron de usarse (portada reemplazada o quitada de la galería).
@@ -70,51 +63,38 @@ export async function saveProject(
     }
   }
 
-  revalidateProjects(input.slug, existing?.slug);
+  revalidateProjects();
   return existing
     ? { ok: true, message: t.saved }
     : { ok: true, message: t.created, created: true };
 }
 
-async function updateFlag(
-  id: string,
-  patch: { publicado: boolean } | { destacado: boolean },
-  message: string,
-): Promise<ActionResult> {
-  const { supabase } = await requireAdmin();
-  if (!idSchema.safeParse(id).success) return { ok: false, error: adminForms.notFound };
-
-  const { data, error } = await supabase
-    .from("projects")
-    .update(patch)
-    .eq("id", id)
-    .select("slug")
-    .maybeSingle();
-  if (error) return { ok: false, error: adminForms.unexpectedError };
-  if (!data) return { ok: false, error: adminForms.notFound };
-
-  revalidateProjects(data.slug);
-  return { ok: true, message };
-}
-
 export async function setProjectPublished(id: string, publicado: boolean): Promise<ActionResult> {
-  if (typeof publicado !== "boolean") return { ok: false, error: adminForms.unexpectedError };
-  return updateFlag(id, { publicado }, publicado ? t.published : t.unpublished);
+  const { supabase } = await requireAdmin();
+  const failure = await setPublishedFlag(supabase, "projects", id, publicado);
+  if (failure) return failure;
+  revalidateProjects();
+  return { ok: true, message: publicado ? t.published : t.unpublished };
 }
 
 export async function setProjectFeatured(id: string, destacado: boolean): Promise<ActionResult> {
-  if (typeof destacado !== "boolean") return { ok: false, error: adminForms.unexpectedError };
-  return updateFlag(id, { destacado }, destacado ? t.featured : t.unfeatured);
+  const { supabase } = await requireAdmin();
+  if (!idSchema.safeParse(id).success || typeof destacado !== "boolean") return notFound;
+
+  const { data, error } = await supabase.from("projects").update({ destacado }).eq("id", id).select("id");
+  if (error) return unexpected;
+  if (!data.length) return notFound;
+
+  revalidateProjects();
+  return { ok: true, message: destacado ? t.featured : t.unfeatured };
 }
 
 export async function moveProject(id: string, direction: MoveDirection): Promise<ActionResult> {
   const { supabase } = await requireAdmin();
-  if (!idSchema.safeParse(id).success || !["up", "down"].includes(direction)) {
-    return { ok: false, error: adminForms.notFound };
-  }
+  if (!idSchema.safeParse(id).success) return notFound;
 
   const { error } = await moveItem(supabase, "projects", id, direction);
-  if (error) return { ok: false, error: adminForms.unexpectedError };
+  if (error) return unexpected;
 
   revalidateProjects();
   return { ok: true, message: t.moved };
@@ -140,18 +120,10 @@ async function listProjectFiles(
 
 export async function deleteProject(id: string): Promise<ActionResult> {
   const { supabase } = await requireAdmin();
-  if (!idSchema.safeParse(id).success) return { ok: false, error: adminForms.notFound };
+  const failure = await deleteById(supabase, "projects", id);
+  if (failure) return failure;
 
-  const { data, error } = await supabase
-    .from("projects")
-    .delete()
-    .eq("id", id)
-    .select("slug")
-    .maybeSingle();
-  if (error) return { ok: false, error: adminForms.unexpectedError };
-  if (!data) return { ok: false, error: adminForms.notFound };
-
-  revalidateProjects(data.slug);
+  revalidateProjects();
 
   // El proyecto ya no existe: si falla la limpieza, se avisa pero no se revierte.
   const files = await listProjectFiles(supabase, id);

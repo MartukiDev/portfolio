@@ -2,10 +2,10 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 
-type OrderedTable = "projects" | "services" | "testimonials" | "timeline_items" | "skills";
+export type OrderedTable = "projects" | "services" | "testimonials" | "timeline_items" | "skills";
 export type MoveDirection = "up" | "down";
 
-type ScopeFilter = { column: string; value: string };
+export type ScopeFilter = { column: string; value: string };
 
 /**
  * Mueve un elemento una posición y renumera `orden` 1..n dentro del grupo
@@ -50,12 +50,10 @@ export async function moveItem(
 export async function nextOrder(
   supabase: SupabaseClient<Database>,
   table: OrderedTable,
+  scope?: ScopeFilter,
 ): Promise<number> {
-  const { data } = await supabase
-    .from(table)
-    .select("orden")
-    .order("orden", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  let query = supabase.from(table).select("orden").order("orden", { ascending: false }).limit(1);
+  if (scope) query = query.eq(scope.column, scope.value);
+  const { data } = await query.maybeSingle();
   return (data?.orden ?? 0) + 1;
 }

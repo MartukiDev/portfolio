@@ -23,8 +23,9 @@ function availabilityBadges(settings: SiteSettings): string[] {
 export function Hero({ settings }: { settings: SiteSettings }) {
   const badges = availabilityBadges(settings);
 
+  // Más espacio abajo que arriba: centro óptico (~45 % del alto), no geométrico.
   return (
-    <section aria-labelledby="hero-title" className="flex min-h-[calc(100svh-5rem)] items-center py-10 sm:py-16">
+    <section aria-labelledby="hero-title" className="flex min-h-[calc(100svh-5rem)] items-center pt-6 pb-[22svh]">
       <div className="w-full">
         {/* Texto real para lectores de pantalla y buscadores; la terminal es decorativa. */}
         <h1 id="hero-title" className="sr-only">

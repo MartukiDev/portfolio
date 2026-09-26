@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Sidebar } from "@/components/admin/Sidebar";
+import { Toaster } from "@/components/admin/Toaster";
 import { admin } from "@/content/es/admin";
 import { requireAdmin } from "@/lib/auth/require-admin";
 
@@ -15,7 +16,7 @@ export default async function PanelLayout({ children }: LayoutProps<"/admin">) {
     <div className="min-h-dvh lg:pl-72">
       <Sidebar email={user.email} />
       <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-10 lg:py-12">
-        {children}
+        <Toaster>{children}</Toaster>
       </main>
     </div>
   );

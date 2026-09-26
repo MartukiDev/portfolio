@@ -1,3 +1,4 @@
+import { MotionProvider } from "@/components/public/MotionProvider";
 import { SiteFooter } from "@/components/public/SiteFooter";
 import { SiteHeader } from "@/components/public/SiteHeader";
 import { publicContent } from "@/content/es/public";
@@ -16,7 +17,7 @@ export default async function PublicLayout({ children }: LayoutProps<"/">) {
       </a>
       <SiteHeader />
       <main id="contenido" className="mx-auto w-full max-w-6xl flex-1 px-4 pt-20 sm:px-6">
-        {children}
+        <MotionProvider>{children}</MotionProvider>
       </main>
       <SiteFooter settings={settings} />
     </>

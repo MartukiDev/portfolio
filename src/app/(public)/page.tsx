@@ -1,22 +1,90 @@
 import { notFound } from "next/navigation";
+import { ContactStrip } from "@/components/public/ContactStrip";
 import { Hero } from "@/components/public/hero/Hero";
-import { GlassCard } from "@/components/ui/GlassCard";
-import { SectionTitle } from "@/components/ui/Heading";
+import { ProjectCard } from "@/components/public/ProjectCard";
+import { Reveal } from "@/components/public/Reveal";
+import { Section } from "@/components/public/Section";
+import { ServiceCard } from "@/components/public/ServiceCard";
+import { TestimonialCard } from "@/components/public/TestimonialCard";
 import { publicContent } from "@/content/es/public";
+import { getPublishedServices, getPublishedTestimonials } from "@/lib/queries/content";
+import { getFeaturedProjects } from "@/lib/queries/projects";
 import { getSiteSettings } from "@/lib/queries/settings";
 
+const HOME_SERVICES = 3;
+
 export default async function HomePage() {
-  const settings = await getSiteSettings();
+  const [settings, featured, services, testimonials] = await Promise.all([
+    getSiteSettings(),
+    getFeaturedProjects(),
+    getPublishedServices(),
+    getPublishedTestimonials(),
+  ]);
   if (!settings) notFound();
 
-  const t = publicContent.placeholder;
+  const t = publicContent.home;
 
+  // Las secciones sin contenido se omiten en la portada.
   return (
     <>
       <Hero settings={settings} />
-      <GlassCard className="mt-8">
-        <SectionTitle eyebrow={t.eyebrow} title={t.title} description={t.description} />
-      </GlassCard>
+
+      <div className="flex flex-col gap-24 sm:gap-32">
+        {featured.length > 0 && (
+          <Section
+            id="destacados"
+            eyebrow={t.featured.eyebrow}
+            title={t.featured.title}
+            description={t.featured.description}
+            link={{ href: "/proyectos", label: t.featured.viewAll }}
+          >
+            <ul className="grid gap-6 sm:grid-cols-2">
+              {featured.map((project, index) => (
+                <li key={project.id}>
+                  <Reveal delay={(index % 2) * 0.08} className="h-full">
+                    <ProjectCard project={project} />
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
+
+        {services.length > 0 && (
+          <Section
+            id="servicios"
+            eyebrow={t.services.eyebrow}
+            title={t.services.title}
+            link={{ href: "/servicios", label: t.services.viewAll }}
+          >
+            <ul className="grid gap-6 md:grid-cols-3">
+              {services.slice(0, HOME_SERVICES).map((service, index) => (
+                <li key={service.id}>
+                  <Reveal delay={index * 0.08} className="h-full">
+                    <ServiceCard service={service} compact />
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
+
+        {testimonials.length > 0 && (
+          <Section id="testimonios" eyebrow={t.testimonials.eyebrow} title={t.testimonials.title}>
+            <ul className="grid gap-6 md:grid-cols-2">
+              {testimonials.map((testimonial, index) => (
+                <li key={testimonial.id}>
+                  <Reveal delay={(index % 2) * 0.08} className="h-full">
+                    <TestimonialCard testimonial={testimonial} />
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
+
+        <ContactStrip settings={settings} />
+      </div>
     </>
   );
 }

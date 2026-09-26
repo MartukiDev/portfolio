@@ -1,6 +1,7 @@
 import { Mail } from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 import { publicContent } from "@/content/es/public";
+import { mailtoUrl, whatsappUrl } from "@/lib/contact";
 import type { SiteSettings } from "@/lib/queries/settings";
 import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from "./BrandIcons";
 
@@ -18,7 +19,7 @@ function footerLinks(settings: SiteSettings | null): FooterLink[] {
   if (!settings) return [];
   const links: FooterLink[] = [];
   if (settings.email) {
-    links.push({ href: `mailto:${settings.email}`, label: t.email, display: settings.email, icon: Mail, external: false });
+    links.push({ href: mailtoUrl(settings.email), label: t.email, display: settings.email, icon: Mail, external: false });
   }
   if (settings.github_url) {
     links.push({ href: settings.github_url, label: t.github, display: t.github, icon: GitHubIcon, external: true });
@@ -27,7 +28,7 @@ function footerLinks(settings: SiteSettings | null): FooterLink[] {
     links.push({ href: settings.linkedin_url, label: t.linkedin, display: t.linkedin, icon: LinkedInIcon, external: true });
   }
   if (settings.whatsapp) {
-    links.push({ href: `https://wa.me/${settings.whatsapp}`, label: t.whatsapp, display: t.whatsapp, icon: WhatsAppIcon, external: true });
+    links.push({ href: whatsappUrl(settings.whatsapp), label: t.whatsapp, display: t.whatsapp, icon: WhatsAppIcon, external: true });
   }
   return links;
 }

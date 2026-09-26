@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Input } from "@/components/ui/Input";
 import { Switch } from "@/components/ui/Switch";
+import { ServiceIcon } from "@/components/ui/ServiceIcon";
 import { Textarea } from "@/components/ui/Textarea";
 import { adminContent } from "@/content/es/admin-content";
 import { deleteService, moveService, saveService, setServicePublished } from "@/lib/actions/services";
-import { getServiceIcon } from "@/lib/icons";
 import type { Tables } from "@/lib/supabase/database.types";
 import { EntityDialog } from "./EntityDialog";
 import { fieldA11y, FormField } from "./FormField";
@@ -47,11 +47,10 @@ export function ServicesManager({ services }: { services: Service[] }) {
             edit={{ onEdit: editor.edit }}
             toggles={[{ key: "publicado", label: c.published, ariaLabel: c.togglePublished, action: setServicePublished }]}
             renderContent={(service) => {
-              const Icon = getServiceIcon(service.icono);
               return (
                 <div className="flex min-w-0 items-start gap-3">
                   <span className="glass-flat flex size-10 shrink-0 items-center justify-center rounded-xl text-accent">
-                    {Icon && <Icon aria-hidden="true" className="size-5" />}
+                    <ServiceIcon name={service.icono} className="size-5" fallback={null} />
                   </span>
                   <div className="flex min-w-0 flex-col gap-1">
                     <div className="flex flex-wrap items-center gap-2">

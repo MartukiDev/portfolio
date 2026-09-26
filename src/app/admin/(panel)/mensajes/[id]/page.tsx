@@ -10,6 +10,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Heading } from "@/components/ui/Heading";
 import { adminContent } from "@/content/es/admin-content";
 import { requireAdmin } from "@/lib/auth/require-admin";
+import { mailtoUrl } from "@/lib/contact";
 import { formatDateTime } from "@/lib/format";
 
 export const metadata: Metadata = {
@@ -25,8 +26,7 @@ export default async function MessagePage({ params }: PageProps<"/admin/mensajes
   if (!message) notFound();
 
   const t = adminContent.messages;
-  const address = message.email.split("@").map(encodeURIComponent).join("@");
-  const mailto = `mailto:${address}?subject=${encodeURIComponent(t.replySubject)}`;
+  const mailto = mailtoUrl(message.email, t.replySubject);
 
   return (
     <div className="flex flex-col gap-6">

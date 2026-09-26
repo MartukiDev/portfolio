@@ -1,30 +1,47 @@
 import "server-only";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
+import { CACHE_TAGS } from "@/lib/queries/tags";
 
-/** Ajustes afectan header, footer, hero, CV y contacto: todo el sitio público. */
+/*
+ * Solo se llaman desde server actions del backoffice. updateTag expira al
+ * instante los datos etiquetados (y las páginas que los usan): la siguiente
+ * visita ve el cambio. revalidatePath además refresca la caché de rutas.
+ *
+ * Ojo: revalidatePath(ruta, "layout") solo invalida si hay un layout.tsx en
+ * ese segmento; las rutas dinámicas del grupo (public) se invalidan con el
+ * patrón del archivo de página.
+ */
+
+/** Ajustes afectan header, footer, hero, CV y contacto: todo el sitio (layout raíz). */
 export function revalidateSettings(): void {
+  updateTag(CACHE_TAGS.settings);
   revalidatePath("/", "layout");
 }
 
-/** Rutas públicas donde aparecen proyectos: portada, listado, todos los casos de estudio y sitemap. */
+/** Portada, listado, todos los casos de estudio y sitemap. */
 export function revalidateProjects(): void {
+  updateTag(CACHE_TAGS.projects);
   revalidatePath("/");
-  revalidatePath("/proyectos", "layout");
+  revalidatePath("/proyectos");
+  revalidatePath("/(public)/proyectos/[slug]", "page");
   revalidatePath("/sitemap.xml");
 }
 
 export function revalidateServices(): void {
+  updateTag(CACHE_TAGS.services);
   revalidatePath("/");
   revalidatePath("/servicios");
 }
 
-/** Los testimonios aparecen en la portada y pueden mostrarse en su caso de estudio. */
+/** Los testimonios aparecen en la portada. */
 export function revalidateTestimonials(): void {
+  updateTag(CACHE_TAGS.testimonials);
   revalidatePath("/");
-  revalidatePath("/proyectos", "layout");
 }
 
 /** Trayectoria y habilidades viven en /cv. */
 export function revalidateCv(): void {
+  updateTag(CACHE_TAGS.timeline);
+  updateTag(CACHE_TAGS.skills);
   revalidatePath("/cv");
 }

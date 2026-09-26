@@ -5,7 +5,7 @@ import { useActionState, useId, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { adminForms } from "@/content/es/admin-forms";
 import type { ActionResult, FormState } from "@/lib/actions/result";
-import { Modal } from "./Modal";
+import { Modal } from "@/components/ui/Modal";
 import { submitWithoutReset } from "./submit";
 import { useToast } from "./Toaster";
 

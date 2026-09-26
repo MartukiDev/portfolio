@@ -3,7 +3,7 @@
 import { useId, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { adminForms } from "@/content/es/admin-forms";
-import { Modal } from "./Modal";
+import { Modal } from "@/components/ui/Modal";
 
 type ConfirmDialogProps = {
   title: string;

@@ -41,7 +41,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Antes del primer pintado: decide si el hero se muestra directo en su estado final. */}
         <script dangerouslySetInnerHTML={{ __html: heroInitScript }} />
         <noscript>
-          <style>{"[data-hero-part]{visibility:visible!important;opacity:1!important}"}</style>
+          <style>
+            {"[data-hero-part],[data-reveal]{visibility:visible!important;opacity:1!important;transform:none!important}"}
+          </style>
         </noscript>
       </head>
       <body className="relative flex min-h-full flex-col">

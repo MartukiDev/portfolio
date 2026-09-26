@@ -297,7 +297,7 @@ La portada abre con una ventana de terminal de vidrio (barra con tres puntos y t
 2. Salida: el nombre (desde `site_settings.nombre`) escribiéndose carácter a carácter en tamaño grande, en mono.
 3. Debajo aparece la tagline (desde `site_settings.tagline`).
 4. Entran con fade los badges de disponibilidad y los dos CTA.
-5. Queda una línea final con el prompt `martojs@m2air:~$` y el cursor parpadeando.
+5. El cursor solo se ve mientras se escribe y desaparece al terminar (sin línea final de prompt: un cursor parpadeando invita a escribir).
 
 Reglas:
 - **Se ejecuta una sola vez por sesión** (`sessionStorage`). Si ya se vio, o si hay `prefers-reduced-motion`, se muestra directamente el estado final.

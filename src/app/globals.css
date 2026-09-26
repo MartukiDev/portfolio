@@ -323,11 +323,3 @@ html:not([data-hero-played]) [data-hero-state="idle"] [data-hero-part] {
   height: 1em;
   background-color: var(--accent);
 }
-.hero-caret--blink::after {
-  animation: caret-blink 1.06s steps(1) infinite;
-}
-@keyframes caret-blink {
-  50% {
-    opacity: 0;
-  }
-}

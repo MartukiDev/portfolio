@@ -1,8 +1,8 @@
 /** Línea de tiempo del hero de terminal (lógica pura, sin React). */
 
 /**
- * "final" es el estado de reposo: todo visible y cursor parpadeando en la
- * última línea. Es lo que renderiza el servidor; si el hero no se ha visto
+ * "final" es el estado de reposo: todo visible y sin cursor (no invita a
+ * escribir). Es lo que renderiza el servidor; si el hero no se ha visto
  * en esta sesión, el CSS lo oculta hasta que la animación toma el control.
  */
 export type Step = "final" | "command" | "name" | "tagline" | "extras";

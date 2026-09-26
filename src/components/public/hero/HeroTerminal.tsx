@@ -2,7 +2,6 @@
 
 import { domAnimation, LazyMotion, m } from "framer-motion";
 import { useEffect, useState, type ReactNode } from "react";
-import { cn } from "@/lib/cn";
 import { HERO_PLAYED_ATTR, HERO_STORAGE_KEY } from "@/lib/hero";
 import { buildTimeline, reached, type Frame } from "@/lib/hero-timeline";
 
@@ -85,7 +84,6 @@ export function HeroTerminal({ windowTitle, prompt, command, name, tagline, chil
   }, []);
 
   const { step } = frame;
-  const isFinal = step === "final";
   const showTagline = reached(step, "tagline");
   const showExtras = reached(step, "extras");
   // En la transición a "command" lo que se oculta desaparece al instante; solo las entradas tienen fade.
@@ -138,11 +136,6 @@ export function HeroTerminal({ windowTitle, prompt, command, name, tagline, chil
           <m.div data-hero-part className="mt-8 flex flex-col gap-6" {...fade(showExtras)}>
             {children}
           </m.div>
-
-          <p aria-hidden="true" data-hero-part className={cn("mt-8 text-sm sm:text-base", !isFinal && "invisible")}>
-            <span className="text-accent">{prompt}</span>{"\u00a0"}
-            <span className="hero-caret hero-caret--blink" />
-          </p>
         </div>
       </div>
     </LazyMotion>

@@ -1,6 +1,6 @@
 export const admin = {
   metaTitle: "Panel",
-  brand: "martodev",
+  brand: "martojs",
   brandSuffix: "admin",
 
   login: {

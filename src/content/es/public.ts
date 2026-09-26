@@ -1,5 +1,5 @@
 export const publicContent = {
-  brand: "martodev",
+  brand: "martojs",
   skipToContent: "Saltar al contenido",
 
   nav: {
@@ -15,7 +15,7 @@ export const publicContent = {
   },
 
   hero: {
-    windowTitle: "martodev@portafolio: ~",
+    windowTitle: "martojs@portafolio: ~",
     prompt: "martojs@m2air:~$",
     command: "whoami",
     ctaPrimary: { href: "/contacto", label: "Trabajemos juntos" },
@@ -174,7 +174,7 @@ export const publicContent = {
 
   notFound: {
     metaTitle: "Página no encontrada",
-    windowTitle: "martodev@portafolio: ~",
+    windowTitle: "martojs@portafolio: ~",
     prompt: "martojs@m2air:~$",
     error: (path: string) => `bash: cd: ${path}: No such file or directory`,
     hint: "La página que buscas no existe o cambió de lugar.",

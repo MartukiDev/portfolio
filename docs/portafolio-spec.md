@@ -1,4 +1,4 @@
-# Portafolio Martín (martodev) — Especificación técnica
+# Portafolio Martín (martojs) — Especificación técnica
 
 ## Objetivo
 
@@ -291,7 +291,7 @@ Contraste mínimo AA en todo texto sobre vidrio.
 - **Geist Mono**: hero de terminal, etiquetas de stack, detalles técnicos.
 
 ### Hero: nombre escribiéndose en terminal
-La portada abre con una ventana de terminal de vidrio (barra con tres puntos y título `martodev@portafolio: ~`). Secuencia:
+La portada abre con una ventana de terminal de vidrio (barra con tres puntos y título `martojs@portafolio: ~`). Secuencia:
 
 1. Aparece el prompt `martojs@m2air:~$` y se escribe `whoami`.
 2. Salida: el nombre (desde `site_settings.nombre`) escribiéndose carácter a carácter en tamaño grande, en mono.

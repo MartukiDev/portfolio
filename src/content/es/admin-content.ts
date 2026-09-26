@@ -153,7 +153,7 @@ export const adminContent = {
     markRead: "Marcar como leído",
     markUnread: "Marcar como no leído",
     reply: "Responder por correo",
-    replySubject: "Re: tu mensaje en martodev",
+    replySubject: "Re: tu mensaje en martojs",
     back: "Volver a la bandeja",
     receivedAt: "Recibido",
     pagination: {

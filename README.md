@@ -1,4 +1,4 @@
-# martodev · portafolio
+# martojs · portafolio
 
 Portafolio personal. La especificación está en [`docs/portafolio-spec.md`](docs/portafolio-spec.md).
 

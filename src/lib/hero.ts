@@ -1,5 +1,5 @@
 /** Clave en sessionStorage: la animación del hero corre una vez por sesión (pestaña). */
-export const HERO_STORAGE_KEY = "martodev:hero-played";
+export const HERO_STORAGE_KEY = "martojs:hero-played";
 /** Atributo en <html> que indica mostrar el hero directamente en su estado final. */
 export const HERO_PLAYED_ATTR = "data-hero-played";
 

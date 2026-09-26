@@ -64,32 +64,64 @@ export function SiteHeader() {
               aria-controls="mobile-nav"
               className="inline-flex size-10 items-center justify-center rounded-full text-fg hover:bg-glass-hover md:hidden"
             >
-              {open ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
+              {/* ☰ y ✕ superpuestos: giran y se funden entre sí. */}
+              <span aria-hidden="true" className="relative size-5">
+                <Menu
+                  className={cn(
+                    "absolute inset-0 size-5 transition duration-300 ease-out",
+                    open ? "rotate-90 scale-75 opacity-0" : "rotate-0 scale-100 opacity-100",
+                  )}
+                />
+                <X
+                  className={cn(
+                    "absolute inset-0 size-5 transition duration-300 ease-out",
+                    open ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-75 opacity-0",
+                  )}
+                />
+              </span>
             </button>
           </div>
 
+          {/*
+            Despliegue animado: grid-template-rows 0fr → 1fr anima hasta la altura
+            justa del contenido. Cerrado queda inert (fuera del orden de Tab).
+          */}
           <nav
             id="mobile-nav"
             aria-label={t.label}
-            className={cn("border-t border-glass-border px-3 pb-3 md:hidden", !open && "hidden")}
+            inert={!open}
+            className={cn(
+              "grid transition-[grid-template-rows,opacity] duration-300 ease-out md:hidden",
+              open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+            )}
           >
-            <ul className="flex flex-col gap-1 pt-3">
-              {t.items.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    aria-current={isActive(item.href) ? "page" : undefined}
+            <div className="min-h-0 overflow-hidden">
+              <ul className="mx-3 flex flex-col gap-1 border-t border-glass-border pt-3 pb-3">
+                {t.items.map((item, index) => (
+                  <li
+                    key={item.href}
+                    // Entrada escalonada al abrir; al cerrar salen todos juntos.
+                    style={{ transitionDelay: open ? `${80 + index * 45}ms` : "0ms" }}
                     className={cn(
-                      "block rounded-full px-4 py-3 text-base transition-colors",
-                      isActive(item.href) ? "bg-accent/10 text-accent" : "text-muted hover:text-fg",
+                      "transition duration-300 ease-out",
+                      open ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0",
                     )}
                   >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      aria-current={isActive(item.href) ? "page" : undefined}
+                      className={cn(
+                        "block rounded-full px-4 py-3 text-base transition-colors",
+                        isActive(item.href) ? "bg-accent/10 text-accent" : "text-muted hover:text-fg",
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </nav>
         </div>
       </div>

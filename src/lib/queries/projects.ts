@@ -58,3 +58,14 @@ export async function getPublishedProjectSlugs(): Promise<string[]> {
   if (error) fail("los slugs de proyectos", error.message);
   return data.map((row) => row.slug);
 }
+
+/** Slugs publicados con su última modificación (para el sitemap). */
+export async function getProjectsForSitemap(): Promise<Array<{ slug: string; updated_at: string }>> {
+  const { data, error } = await createPublicClient([CACHE_TAGS.projects])
+    .from("projects")
+    .select("slug, updated_at")
+    .eq("publicado", true)
+    .order("orden");
+  if (error) fail("los proyectos del sitemap", error.message);
+  return data;
+}

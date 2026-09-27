@@ -11,14 +11,12 @@ import { contactContent } from "@/content/es/contact";
 import { publicContent } from "@/content/es/public";
 import { mailtoUrl } from "@/lib/contact";
 import { formatMonthYear } from "@/lib/format";
+import { pageMetadata } from "@/lib/metadata";
 import { getSiteSettings } from "@/lib/queries/settings";
 
 const t = contactContent;
 
-export const metadata: Metadata = {
-  title: t.metaTitle,
-  description: t.metaDescription,
-};
+export const metadata: Metadata = pageMetadata({ title: t.metaTitle, description: t.metaDescription, path: "/contacto" });
 
 export default async function ContactPage() {
   const settings = await getSiteSettings();

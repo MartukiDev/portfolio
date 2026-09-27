@@ -348,6 +348,25 @@ html:not([data-hero-played]) [data-hero-state="idle"] [data-hero-part] {
   visibility: hidden;
 }
 
+/*
+ * Nombre (elemento LCP): antes de la animación y en lo pendiente se pinta casi
+ * transparente en vez de ocultarse, para que el LCP no espere a la animación.
+ */
+.hero-ghost,
+html:not([data-hero-played]) [data-hero-state="idle"] [data-hero-name] {
+  color: rgb(230 234 242 / 0.015);
+}
+
+/*
+ * Sin kerning ni ligaduras contextuales: al partir el texto entre "escrito" y
+ * "pendiente" el ancho de cada letra no cambia (sin micro layout shifts).
+ */
+[data-hero-name] {
+  font-kerning: none;
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0, "liga" 0, "kern" 0;
+}
+
 /* Cursor de ancho cero: no desplaza el texto ni crea puntos de corte de línea. */
 .hero-caret {
   position: relative;

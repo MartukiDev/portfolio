@@ -42,7 +42,7 @@ export function ProjectGallery({ paths, title }: ProjectGalleryProps) {
                 src={mediaUrl(path)}
                 alt={t.galleryAlt(title, i + 1)}
                 fill
-                sizes="(min-width: 1024px) 300px, 50vw"
+                sizes="(min-width: 1200px) 370px, (min-width: 1024px) 31vw, 50vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none"
               />
             </button>

@@ -136,7 +136,7 @@ function renderNode(node: Node, key: string, options: Options): ReactNode {
           alt={stringAttr(node, "alt") ?? options.imageAlt}
           width={0}
           height={0}
-          sizes="(min-width: 768px) 720px, 100vw"
+          sizes="(min-width: 800px) 768px, 100vw"
           className="h-auto w-full"
         />
       );

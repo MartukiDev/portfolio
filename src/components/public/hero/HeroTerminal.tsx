@@ -84,6 +84,7 @@ export function HeroTerminal({ windowTitle, prompt, command, name, tagline, chil
   }, []);
 
   const { step } = frame;
+  const isFinal = step === "final";
   const showTagline = reached(step, "tagline");
   const showExtras = reached(step, "extras");
   // En la transición a "command" lo que se oculta desaparece al instante; solo las entradas tienen fade.
@@ -116,15 +117,28 @@ export function HeroTerminal({ windowTitle, prompt, command, name, tagline, chil
                 <Typed chars={commandChars} count={frame.command} caret={step === "command"} />
               </span>
             </p>
+            {/*
+              El nombre es el elemento LCP. Dos capas:
+              - base: el nombre completo, fijo en el flujo; "fantasma" (casi
+                invisible) mientras se escribe. Cuenta como pintado desde el primer
+                frame, así la animación no retrasa el LCP, y nunca se mueve (CLS 0).
+              - encima: lo escrito; lo pendiente con visibility:hidden para que los
+                saltos de línea coincidan con la base sin generar layout shifts.
+            */}
             <p
-              data-hero-part
-              className="mt-5 text-[clamp(2rem,1.2rem+4.2vw,4.25rem)] leading-[1.05] font-semibold tracking-tight break-words text-fg"
+              data-hero-name
+              className="relative mt-5 text-[clamp(2rem,1.2rem+4.2vw,4.25rem)] leading-[1.05] font-semibold tracking-tight break-words text-fg"
             >
-              <Typed
-                chars={nameChars}
-                count={reached(step, "name") ? frame.name : 0}
-                caret={step === "name" || step === "tagline" || step === "extras"}
-              />
+              <span className={isFinal ? undefined : "hero-ghost"}>{name}</span>
+              {!isFinal && (
+                <span className="absolute inset-0">
+                  <Typed
+                    chars={nameChars}
+                    count={reached(step, "name") ? frame.name : 0}
+                    caret={step === "name" || step === "tagline" || step === "extras"}
+                  />
+                </span>
+              )}
             </p>
             {tagline && (
               <m.p data-hero-part className="mt-3 text-base text-muted sm:text-xl" {...fade(showTagline)}>

@@ -14,6 +14,7 @@ import { GlassPanel } from "@/components/ui/GlassPanel";
 import { Heading } from "@/components/ui/Heading";
 import { publicContent } from "@/content/es/public";
 import { getProjectBySlug, getPublishedProjectSlugs } from "@/lib/queries/projects";
+import { pageMetadata } from "@/lib/metadata";
 import { mediaUrl } from "@/lib/storage";
 
 const t = publicContent.caseStudy;
@@ -27,7 +28,16 @@ export async function generateMetadata({ params }: PageProps<"/proyectos/[slug]"
   const { slug } = await params;
   const project = await getProjectBySlug(slug);
   if (!project) return {};
-  return { title: project.titulo, description: project.resumen };
+  return pageMetadata({
+    title: project.titulo,
+    description: project.resumen,
+    path: `/proyectos/${project.slug}`,
+    type: "article",
+    // Sin portada se usa la OG por defecto del sitio.
+    image: project.portada_path
+      ? { url: mediaUrl(project.portada_path), width: 1200, height: 630, alt: t.coverAlt(project.titulo) }
+      : undefined,
+  });
 }
 
 /** Sección del caso de estudio; `wide` usa todo el ancho (galería), el resto la columna de lectura. */

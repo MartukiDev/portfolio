@@ -10,13 +10,18 @@ import { supabasePublishableKey, supabaseUrl } from "./env";
  * que ve a los registros publicados.
  *
  * `tags` etiqueta las respuestas en la caché de datos de Next para poder
- * invalidarlas desde el backoffice (ver lib/revalidate.ts).
+ * invalidarlas al instante desde el backoffice (ver lib/revalidate.ts).
+ * Además vencen solas cada hora: red de seguridad si un dato cambia por fuera
+ * del backoffice (p. ej. directo en Supabase o desde otro entorno).
  */
+const PUBLIC_DATA_REVALIDATE_SECONDS = 3600;
+
 export function createPublicClient(tags: readonly CacheTag[]) {
   return createSupabaseClient<Database>(supabaseUrl, supabasePublishableKey, {
     auth: { persistSession: false, autoRefreshToken: false },
     global: {
-      fetch: (input, init) => fetch(input, { ...init, next: { tags: [...tags] } }),
+      fetch: (input, init) =>
+        fetch(input, { ...init, next: { tags: [...tags], revalidate: PUBLIC_DATA_REVALIDATE_SECONDS } }),
     },
   });
 }

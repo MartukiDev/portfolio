@@ -133,6 +133,8 @@ export const publicContent = {
 
   cv: {
     metaTitle: "CV",
+    metaDescription: (nombre: string, tagline: string | null) =>
+      `Currículum de ${nombre}${tagline ? `, ${tagline.toLowerCase()}` : ""}: trayectoria, habilidades y disponibilidad para práctica profesional.`,
     eyebrow: "Currículum",
     title: "CV",
     download: "Descargar CV en PDF",

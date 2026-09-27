@@ -82,10 +82,10 @@ export function ProjectGrid({ projects, active }: { projects: ProjectCardData[];
             <li key={project.id}>
               {/* Las dos primeras están sobre el pliegue (candidatas a LCP): sin animación de entrada. */}
               {index < ABOVE_THE_FOLD ? (
-                <ProjectCard project={project} priority />
+                <ProjectCard project={project} priority headingLevel={2} />
               ) : (
                 <Reveal delay={(index % 2) * 0.08} className="h-full">
-                  <ProjectCard project={project} />
+                  <ProjectCard project={project} headingLevel={2} />
                 </Reveal>
               )}
             </li>

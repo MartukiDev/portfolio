@@ -4,14 +4,12 @@ import { EmptyState } from "@/components/public/EmptyState";
 import { ProjectExplorer, ProjectGrid } from "@/components/public/ProjectExplorer";
 import { SectionTitle } from "@/components/ui/Heading";
 import { publicContent } from "@/content/es/public";
+import { pageMetadata } from "@/lib/metadata";
 import { getPublishedProjects } from "@/lib/queries/projects";
 
 const t = publicContent.projects;
 
-export const metadata: Metadata = {
-  title: t.metaTitle,
-  description: t.description,
-};
+export const metadata: Metadata = pageMetadata({ title: t.metaTitle, description: t.description, path: "/proyectos" });
 
 export default async function ProjectsPage() {
   const projects = await getPublishedProjects();

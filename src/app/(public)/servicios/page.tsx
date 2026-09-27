@@ -6,14 +6,12 @@ import { Button } from "@/components/ui/Button";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { SectionTitle } from "@/components/ui/Heading";
 import { publicContent } from "@/content/es/public";
+import { pageMetadata } from "@/lib/metadata";
 import { getPublishedServices } from "@/lib/queries/content";
 
 const t = publicContent.services;
 
-export const metadata: Metadata = {
-  title: t.metaTitle,
-  description: t.description,
-};
+export const metadata: Metadata = pageMetadata({ title: t.metaTitle, description: t.description, path: "/servicios" });
 
 export default async function ServicesPage() {
   const services = await getPublishedServices();
@@ -29,7 +27,7 @@ export default async function ServicesPage() {
           {services.map((service, index) => (
             <li key={service.id}>
               <Reveal delay={(index % 3) * 0.08} className="h-full">
-                <ServiceCard service={service} />
+                <ServiceCard service={service} headingLevel={2} />
               </Reveal>
             </li>
           ))}

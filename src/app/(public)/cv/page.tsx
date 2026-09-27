@@ -10,6 +10,7 @@ import { GlassPanel } from "@/components/ui/GlassPanel";
 import { Heading, SectionTitle } from "@/components/ui/Heading";
 import { publicContent } from "@/content/es/public";
 import { formatMonthYear } from "@/lib/format";
+import { pageMetadata } from "@/lib/metadata";
 import { getSkills, getTimeline } from "@/lib/queries/content";
 import { getSiteSettings } from "@/lib/queries/settings";
 import { CV_BUCKET, publicUrl } from "@/lib/storage";
@@ -17,9 +18,15 @@ import { CV_BUCKET, publicUrl } from "@/lib/storage";
 const t = publicContent.cv;
 const AREAS = ["frontend", "backend", "ia", "hardware", "infra", "otras"] as const;
 
-export const metadata: Metadata = {
-  title: t.metaTitle,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return pageMetadata({
+    title: t.metaTitle,
+    description: settings ? t.metaDescription(settings.nombre, settings.tagline) : null,
+    path: "/cv",
+    type: "profile",
+  });
+}
 
 export default async function CvPage() {
   const [settings, timeline, skills] = await Promise.all([getSiteSettings(), getTimeline(), getSkills()]);

@@ -9,4 +9,3 @@ npm install
 npm run dev
 ```
 
-- `/design-system`: página temporal con tokens y componentes base.
